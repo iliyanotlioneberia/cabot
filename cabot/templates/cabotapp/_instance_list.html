@@ -41,3 +41,19 @@
       </tbody>
 {% endif %}
     </table>
+
+    <ul class="pagination pagination-centered">
+        {% if instances.has_previous %}
+            <li><a href="?page=1"><<</a></li>
+            <li><a href="?page={{ data.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+            <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>
+
+
+
+        {% if instances.has_next %}
+            <li><a href="?page={{ instances.next_page_number }}">next</a></li>
+            <li><a href="?page={{ instances.paginator.num_pages }}">>></a></li>
+        {% endif %}
+    </ul>

@@ -30,6 +30,8 @@ import requests
 import json
 import re
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, redirect
 
 class LoginRequiredMixin(object):
 
@@ -580,9 +582,29 @@ class InstanceListView(LoginRequiredMixin, ListView):
 
     model = Instance
     context_object_name = 'instances'
+    template_name = 'cabotapp/instance_list.html'
 
-    def get_queryset(self):
-        return Instance.objects.all().order_by('name').prefetch_related('status_checks')
+    def get(self, request):
+        data = Instance.objects.all().order_by('name')
+        if data:
+            paginator = Paginator(data, 10)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'instances': records})
+        else:
+
+            return render(request, self.template_name)
+
+
+    #def get_queryset(self):
+    #    return Instance.objects.all().order_by('name').prefetch_related('status_checks')
 
 
 class ServiceListView(LoginRequiredMixin, ListView):

@@ -66,20 +66,6 @@ urlpatterns = patterns('',
      url(r'^instances/', view=InstanceListView.as_view(),
              name='instances'),
 
-
-     #TODO -- create url for search and pass a name=hostname
-     # url(r'^instanceinfo/(?P<name>.*)/', view=SearchView.as_view(),
-     #         name='instance_info'),
-
-     url(r'^instanceinfo/(?P<name>.*)/', 'cabot.cabotapp.views.SearchViewFBV', name='instance_info'),
-
-     url(r'^instancesearch/(?P<name>.*)/', view=InstanceSearchView.as_view(), name='instances_search'),
-
-     url(r'^checksinfo/(?P<name>.*)/', 'cabot.cabotapp.views.StatusCheckSearchViewFBV', name='checks_info'),
-
-     url(r'^checkssearch/(?P<name>.*)/', view=StatusCheckSearchView.as_view(), name='checks_search'),
-
-
      url(r'^instance/create/', view=InstanceCreateView.as_view(),
              name='create-instance'),
      url(r'^instance/update/(?P<pk>\d+)/',
@@ -160,6 +146,21 @@ urlpatterns = patterns('',
      url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
      url(r'^api/', include(rest_urls.router.urls)),
+
+
+     #TODO -- create url for search and pass a name=hostname
+     # url(r'^instanceinfo/(?P<name>.*)/', view=SearchView.as_view(),
+     #         name='instance_info'),
+
+     url(r'^instanceinfo/(?P<name>.*)/', 'cabot.cabotapp.views.SearchViewFBV', name='instance_info'),
+
+     url(r'^instancesearch/(?P<name>.*)/', view=InstanceSearchView.as_view(), name='instances_search'),
+
+     url(r'^checksinfo/(?P<name>.*)/', 'cabot.cabotapp.views.StatusCheckSearchViewFBV', name='checks_info'),
+
+     url(r'^checkssearch/(?P<name>.*)/', view=StatusCheckSearchView.as_view(), name='checks_search'),
+
+
      )
 
 def append_plugin_urls():

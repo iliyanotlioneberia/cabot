@@ -547,8 +547,8 @@ def StatusCheckSearchViewFBV(request, name=None):
             name = form.cleaned_data['name']
 
             try:
-                instance = StatusCheck.objects.get(name=name)
-                return redirect('check', pk=instance.pk)
+                check = StatusCheck.objects.get(name=name)
+                return redirect('check', pk=check.pk)
             except StatusCheck.DoesNotExist:
                 # return redirect('instances')
                 return redirect('checks_search', name=name)

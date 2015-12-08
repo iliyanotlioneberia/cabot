@@ -1,23 +1,4 @@
 
-<form name="form1" action="{% url 'instance_info' name=name %}" method="GET" class="form-horizontal">
-{#    {% csrf_token %}#}
-
-    <div class="form-group">
-        <div class="col-sm-5">
-            <input type="text" name="name" class="form-control" id="hostname" placeholder="Pick a host">
-        </div>
-
-{#        {{ form }}#}
-
-{#        <br>#}
-        <div class="span7 text-left">
-            <input class="btn btn-info btn-group-sm" type="submit" name="submit" value="Submit">
-        </div>
-    </div>
-
-</form>
-
-
 <table class="table bootstrap-datatable datatable">
       <thead>
         <tr>
@@ -60,17 +41,3 @@
       </tbody>
 {% endif %}
     </table>
-
-    <ul class="pagination pagination-centered">
-        {% if instances.has_previous %}
-            <li><a href="?page=1"><<</a></li>
-            <li><a href="?page={{ data.previous_page_number }}">previous</a></li>
-        {% endif %}
-
-        <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>
-
-        {% if instances.has_next %}
-            <li><a href="?page={{ instances.next_page_number }}">next</a></li>
-            <li><a href="?page={{ instances.paginator.num_pages }}">>></a></li>
-        {% endif %}
-    </ul>

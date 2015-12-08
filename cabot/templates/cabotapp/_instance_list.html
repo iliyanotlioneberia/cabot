@@ -1,22 +1,21 @@
 
-<form name="form1" action="." method="GET" class="form-horizontal" id="doctors">{% csrf_token %}
+<form name="form1" action="{% url 'instance_info' name=name %}" method="GET" class="form-horizontal">
+{#    {% csrf_token %}#}
 
     <div class="form-group">
-        <div class="col-sm-12"> {# was 10 originally with label #}
-            <input type="text" name="hostname" class="form-control" id="hostname" placeholder="Pick a host">
+        <div class="col-sm-5">
+            <input type="text" name="name" class="form-control" id="hostname" placeholder="Pick a host">
         </div>
 
-        <br>
-        <div class="span7 text-center">
-            <input class="btn btn-info btn-lg" type="submit" name="submit" value="Submit">
+{#        {{ form }}#}
+
+{#        <br>#}
+        <div class="span7 text-left">
+            <input class="btn btn-info btn-group-sm" type="submit" name="submit" value="Submit">
         </div>
     </div>
 
 </form>
-
-<div>
-    <p>Hi Jason</p>
-</div>
 
 
 <table class="table bootstrap-datatable datatable">
@@ -68,9 +67,7 @@
             <li><a href="?page={{ data.previous_page_number }}">previous</a></li>
         {% endif %}
 
-            <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>
-
-
+        <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>
 
         {% if instances.has_next %}
             <li><a href="?page={{ instances.next_page_number }}">next</a></li>

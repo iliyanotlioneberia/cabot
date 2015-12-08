@@ -482,12 +482,80 @@ class JenkinsCheckUpdateView(CheckUpdateView):
         return super(JenkinsCheckUpdateView, self).form_valid(form)
 
 
-class StatusCheckListView(LoginRequiredMixin, ListView):
+class StatusCheckListView_orig(LoginRequiredMixin, ListView):
     model = StatusCheck
     context_object_name = 'checks'
 
     def get_queryset(self):
         return StatusCheck.objects.all().order_by('name').prefetch_related('service_set', 'instance_set')
+
+
+class StatusCheckListView(LoginRequiredMixin, ListView):
+    model = StatusCheck
+    context_object_name = 'checks'
+    template_name = 'cabotapp/statuscheck_list.html'
+    form = HostSearchForm
+
+    def get(self, request):
+        data = StatusCheck.objects.all().order_by('name')
+        if data:
+            paginator = Paginator(data, 20)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'checks': records, 'form': self.form})
+        else:
+            return render(request, self.template_name, {'form': self.form})
+
+
+class StatusCheckSearchView(LoginRequiredMixin, ListView):
+    model = StatusCheck
+    context_object_name = 'checks'
+    template_name = 'cabotapp/statuscheck_list.html'
+    form = HostSearchForm
+
+    def get(self, request, name=None):
+        if name is not None:
+            data = StatusCheck.objects.filter(name__icontains=name).order_by('name')
+            if data:
+                paginator = Paginator(data, 20)
+                page = request.GET.get('page')
+
+                try:
+                    records = paginator.page(page)
+                except PageNotAnInteger:
+                    records = paginator.page(1)
+                except EmptyPage:
+                    records = paginator.page(paginator.num_pages)
+
+                return render(request, self.template_name, {'checks': records, 'form': self.form})
+            else:
+                # return render(request, self.template_name, {'form': self.form})
+                return redirect('checks')
+
+
+def StatusCheckSearchViewFBV(request, name=None):
+    if request.method == 'GET':
+        form = HostSearchForm(request.GET)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+
+            try:
+                instance = StatusCheck.objects.get(name=name)
+                return redirect('check', pk=instance.pk)
+            except StatusCheck.DoesNotExist:
+                # return redirect('instances')
+                return redirect('checks_search', name=name)
+        else:
+            return redirect('checks')
+    else:
+        return redirect('checks')
 
 
 class StatusCheckDeleteView(LoginRequiredMixin, DeleteView):

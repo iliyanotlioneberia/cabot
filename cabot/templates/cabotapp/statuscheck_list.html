@@ -4,6 +4,22 @@
 
 {% include 'cabotapp/_statuscheck_list.html' with checks_type="All" %}
 
+
+    <ul class="pagination pagination-centered">
+        {% if checks.has_previous %}
+            <li><a href="?page=1"><<</a></li>
+            <li><a href="?page={{ checks.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+        <li>Page {{ checks.number }} of {{ checks.paginator.num_pages }}.</li>
+
+        {% if checks.has_next %}
+            <li><a href="?page={{ checks.next_page_number }}">next</a></li>
+            <li><a href="?page={{ checks.paginator.num_pages }}">>></a></li>
+        {% endif %}
+    </ul>
+
+
 {% endblock content %}
 
 {% block js %}
@@ -11,14 +27,14 @@
 {{ block.super }}
 {% compress js %}
 <script type="text/coffeescript">
-  $('.datatable').dataTable
-    sDom: "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>"
-    sPaginationType: "bootstrap"
-    iDisplayLength: 100
-    oLanguage:
-      sLengthMenu: "_MENU_ records per page"
-    fnDrawCallback: () ->
-      $('.sparktristate').sparkline('html', {type: 'tristate'})
+{#  $('.datatable').dataTable#}
+{#    sDom: "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>"#}
+{#    sPaginationType: "bootstrap"#}
+{#    iDisplayLength: 100#}
+{#    oLanguage:#}
+{#      sLengthMenu: "_MENU_ records per page"#}
+{#    fnDrawCallback: () ->#}
+{#      $('.sparktristate').sparkline('html', {type: 'tristate'})#}
 </script>
 {% endcompress %}
 {% endblock js %}

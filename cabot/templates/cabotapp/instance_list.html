@@ -36,7 +36,7 @@
       <ul class="pagination pagination-centered">
           {% if instances.has_previous %}
               <li><a href="?page=1"><<</a></li>
-              <li><a href="?page={{ data.previous_page_number }}">previous</a></li>
+              <li><a href="?page={{ instances.previous_page_number }}">previous</a></li>
           {% endif %}
 
           <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>

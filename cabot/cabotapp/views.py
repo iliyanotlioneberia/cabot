@@ -520,24 +520,25 @@ class StatusCheckSearchView(LoginRequiredMixin, ListView):
     template_name = 'cabotapp/statuscheck_list.html'
     form = HostSearchForm
 
-    def get(self, request, name=None):
-        if name is not None:
-            data = StatusCheck.objects.filter(name__icontains=name).order_by('name')
-            if data:
-                paginator = Paginator(data, 20)
-                page = request.GET.get('page')
+    def get(self, request, *args, **kwargs):
+        # if name is not None:
+        name = request.GET.get('name', False)
+        data = StatusCheck.objects.filter(name__icontains=name).order_by('name')
+        if data:
+            paginator = Paginator(data, 20)
+            page = request.GET.get('page')
 
-                try:
-                    records = paginator.page(page)
-                except PageNotAnInteger:
-                    records = paginator.page(1)
-                except EmptyPage:
-                    records = paginator.page(paginator.num_pages)
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
 
-                return render(request, self.template_name, {'checks': records, 'form': self.form})
-            else:
-                # return render(request, self.template_name, {'form': self.form})
-                return redirect('checks')
+            return render(request, self.template_name, {'checks': records, 'form': self.form})
+        else:
+            # return render(request, self.template_name, {'form': self.form})
+            return redirect('checks')
 
 
 def StatusCheckSearchViewFBV(request, name=None):
@@ -680,24 +681,26 @@ class InstanceSearchView(LoginRequiredMixin, ListView):
     template_name = 'cabotapp/instance_list.html'
     form = HostSearchForm
 
-    def get(self, request, name=None):
-        if name is not None:
-            data = Instance.objects.filter(name__icontains=name).order_by('name')
-            if data:
-                paginator = Paginator(data, 20)
-                page = request.GET.get('page')
+    def get(self, request, *args, **kwargs):
+        # import ipdb; ipdb.set_trace()
+        bla = request.GET.get('name', False)
+        # bla = self.kwargs.get('name')
+        data = Instance.objects.filter(name__icontains=bla).order_by('name')
+        if data:
+            paginator = Paginator(data, 20)
+            page = request.GET.get('page')
 
-                try:
-                    records = paginator.page(page)
-                except PageNotAnInteger:
-                    records = paginator.page(1)
-                except EmptyPage:
-                    records = paginator.page(paginator.num_pages)
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
 
-                return render(request, self.template_name, {'instances': records, 'form': self.form})
-            else:
-                # return render(request, self.template_name, {'form': self.form})
-                return redirect('instances')
+            return render(request, self.template_name, {'instances': records, 'form': self.form})
+        else:
+            # return render(request, self.template_name, {'form': self.form})
+            return redirect('instances')
 
 
 

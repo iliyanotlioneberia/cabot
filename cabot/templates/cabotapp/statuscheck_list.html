@@ -5,29 +5,28 @@
 {% include 'cabotapp/_statuscheck_list.html' with checks_type="All" %}
 
 
-{#    <ul class="pagination pagination-centered">#}
-{#        {% if checks.has_previous %}#}
-{#            <li><a href="?page=1"><<</a></li>#}
-{#            <li><a href="?page={{ checks.previous_page_number }}">previous</a></li>#}
-{#        {% endif %}#}
-{##}
-{#        <li>Page {{ checks.number }} of {{ checks.paginator.num_pages }}.</li>#}
-{##}
-{#        {% if checks.has_next %}#}
-{#            <li><a href="?page={{ checks.next_page_number }}">next</a></li>#}
-{#            <li><a href="?page={{ checks.paginator.num_pages }}">>></a></li>#}
-{#        {% endif %}#}
-{#    </ul>#}
-
 <div class="pagination pagination-centered">
+
     <div class="row-fluid">
-        <div class="span12">Showing {{ checks.number }} of {{ checks.paginator.num_pages }} entries</div>
         <div class="span12">
             <ul class="pagination pull-right">
 
+                {% if checks.number != 1 %}
+                    <li><a href="?page=1">← First</a></li>
+                {% else %}
+                    <li class="disabled"><a>← First</a></li>
+                {% endif %}
+
+                {% if checks.has_previous3 %}
+                    <li><a href="?page={{ checks.previous_page_number3 }}"> {{ checks.previous_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if checks.has_previous2 %}
+                    <li><a href="?page={{ checks.previous_page_number2 }}"> {{ checks.previous_page_number2 }} </a></li>
+                {% endif %}
+
                 {% if checks.has_previous %}
 {#                    <li class="prev disabled"><a href="?page={{ checks.previous_page_number }}">← Previous</a></li>#}
-                    <li><a href="?page=1">← First</a></li>
                     <li><a href="?page={{ checks.previous_page_number }}"> {{ checks.previous_page_number }} </a></li>
                 {% endif %}
 
@@ -37,27 +36,70 @@
 {#                    <li class="{% if checks.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>#}
 {#                {% endfor %}#}
 
-
-{#                {% for page in checks.paginator.page_range %}#}
-{#                    <li class="active"><a href="#"> {{ page.number }} </a></li>#}
-{#                {% endfor %}#}
-
                 {% if checks.has_next %}
                     <li><a href="?page={{ checks.next_page_number }}"> {{ checks.next_page_number }} </a></li>
+                {% endif %}
+
+                {% if checks.has_next2 %}
+                    <li><a href="?page={{ checks.next_page_number2 }}"> {{ checks.next_page_number2 }} </a></li>
+                {% endif %}
+
+
+                {% if checks.has_next3 %}
+                    <li><a href="?page={{ checks.next_page_number3 }}"> {{ checks.next_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if checks.number == checks.paginator.num_pages %}
+                    <li class="disabled"><a>Last → </a></li>
+                {% else %}
                     <li><a href="?page={{ checks.paginator.num_pages }}">Last → </a></li>
                 {% endif %}
 
             </ul>
         </div>
+    <div class="span1">Showing {{ checks.number }} of {{ checks.paginator.num_pages }} entries</div>
     </div>
+
 </div>
+
+
+
+
+{#<ul class="pagination pagination-centered">#}
+{#        {% if checks.has_previous %}#}
+{#            <li><a href="?page=1"><<</a></li>#}
+{#            <li><a href="?page={{ checks.previous_page_number }}"><</a></li>#}
+{#        {% endif %}#}
+
+{#        <li class="active"><a href="#"> {{ checks.number }} </a></li>#}
+
+{#        {% for i in checks.paginator.page_range %}#}
+{#            {% if i > checks.number|add:"-5" %}#}
+{#                <li {% if checks.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>#}
+{#                <li><a href="?page={{i}}">{{i}}</a></li>#}
+{##}
+{#            {% elif checks.number == i %}#}
+{#                <li class="active"><a href="?page={{i}}">{{i}}</a></li>#}
+{##}
+{#            {% elif i < checks.number|add:"5" %}#}
+{#                <li><a href="?page={{i}}">{{i}}</a></li>#}
+{#                #}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+
+{#        {% if checks.has_next %}#}
+{#            <li><a href="?page={{ checks.next_page_number }}">></a></li>#}
+{#            <li><a href="?page={{ checks.paginator.num_pages }}">>></a></li>#}
+{#        {% endif %}#}
+{#</ul>#}
+
 
 {% endblock content %}
 
-{% block js %}
-{% load compress %}
-{{ block.super }}
-{% compress js %}
+{#{% block js %}#}
+{#{% load compress %}#}
+{#{{ block.super }}#}
+{#{% compress js %}#}
 {#<script type="text/coffeescript">#}
 {#  $('.datatable').dataTable#}
 {#    sDom: "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>"#}
@@ -68,5 +110,5 @@
 {#    fnDrawCallback: () ->#}
 {#      $('.sparktristate').sparkline('html', {type: 'tristate'})#}
 {#</script>#}
-{% endcompress %}
-{% endblock js %}
+{#{% endcompress %}#}
+{#{% endblock js %}#}

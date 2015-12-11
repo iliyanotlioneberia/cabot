@@ -30,7 +30,9 @@ import requests
 import json
 import re
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Page
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from utils import Paginator2
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from forms import HostSearchForm
@@ -499,7 +501,7 @@ class StatusCheckListView(LoginRequiredMixin, ListView):
     def get(self, request):
         data = StatusCheck.objects.all().order_by('name')
         if data:
-            paginator = Paginator(data, 20)
+            paginator = Paginator2(data, 20)
             page = request.GET.get('page')
 
             try:
@@ -520,12 +522,11 @@ class StatusCheckSearchView(LoginRequiredMixin, ListView):
     template_name = 'cabotapp/statuscheck_list.html'
     form = HostSearchForm
 
-    def get(self, request, *args, **kwargs):
-        # if name is not None:
-        name = request.GET.get('name', False)
+    def get(self, request, name=None):
+        # name = request.GET.get('name', False)
         data = StatusCheck.objects.filter(name__icontains=name).order_by('name')
         if data:
-            paginator = Paginator(data, 20)
+            paginator = Paginator2(data, 20)
             page = request.GET.get('page')
 
             try:
@@ -660,7 +661,7 @@ class InstanceListView(LoginRequiredMixin, ListView):
     def get(self, request):
         data = Instance.objects.all().order_by('name')
         if data:
-            paginator = Paginator(data, 20)
+            paginator = Paginator2(data, 20)
             page = request.GET.get('page')
 
             try:
@@ -681,13 +682,13 @@ class InstanceSearchView(LoginRequiredMixin, ListView):
     template_name = 'cabotapp/instance_list.html'
     form = HostSearchForm
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, name=None):
         # import ipdb; ipdb.set_trace()
-        bla = request.GET.get('name', False)
-        # bla = self.kwargs.get('name')
-        data = Instance.objects.filter(name__icontains=bla).order_by('name')
+        # name = request.GET.get('name', False)
+        # name = self.kwargs.get('name')
+        data = Instance.objects.filter(name__icontains=name).order_by('name')
         if data:
-            paginator = Paginator(data, 20)
+            paginator = Paginator2(data, 20)
             page = request.GET.get('page')
 
             try:

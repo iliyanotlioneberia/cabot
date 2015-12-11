@@ -11,7 +11,7 @@
   </div>
   <div class="col-xs-12">
 
-      <form name="form1" action="{% url 'instances_search' name=name %}" method="GET" class="form-horizontal">
+      <form name="form1" action="{% url 'instance_info' name=name %}" method="GET" class="form-horizontal">
 {#      {% csrf_token %}#}
 
           <div class="form-group">
@@ -33,19 +33,77 @@
       {% include 'cabotapp/_instance_list.html' %}
 
 
-      <ul class="pagination pagination-centered">
-          {% if instances.has_previous %}
-              <li><a href="?page=1"><<</a></li>
-              <li><a href="?page={{ instances.previous_page_number }}">previous</a></li>
-          {% endif %}
+{#      <ul class="pagination pagination-centered">#}
+{#          {% if instances.has_previous %}#}
+{#              <li><a href="?page=1"><<</a></li>#}
+{#              <li><a href="?page={{ instances.previous_page_number }}">previous</a></li>#}
+{#          {% endif %}#}
+{##}
+{#          <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>#}
+{##}
+{#          {% if instances.has_next %}#}
+{#              <li><a href="?page={{ instances.next_page_number }}">next</a></li>#}
+{#              <li><a href="?page={{ instances.paginator.num_pages }}">>></a></li>#}
+{#          {% endif %}#}
+{#      </ul>#}
 
-          <li>Page {{ instances.number }} of {{ instances.paginator.num_pages }}.</li>
+<div class="pagination pagination-centered">
 
-          {% if instances.has_next %}
-              <li><a href="?page={{ instances.next_page_number }}">next</a></li>
-              <li><a href="?page={{ instances.paginator.num_pages }}">>></a></li>
-          {% endif %}
-      </ul>
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="pagination pull-right">
+
+                {% if instances.number != 1 %}
+                    <li><a href="?page=1">← First</a></li>
+                {% else %}
+                    <li class="disabled"><a>← First</a></li>
+                {% endif %}
+
+                {% if instances.has_previous3 %}
+                    <li><a href="?page={{ instances.previous_page_number3 }}"> {{ instances.previous_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if instances.has_previous2 %}
+                    <li><a href="?page={{ instances.previous_page_number2 }}"> {{ instances.previous_page_number2 }} </a></li>
+                {% endif %}
+
+                {% if instances.has_previous %}
+{#                    <li class="prev disabled"><a href="?page={{ checks.previous_page_number }}">← Previous</a></li>#}
+                    <li><a href="?page={{ instances.previous_page_number }}"> {{ instances.previous_page_number }} </a></li>
+                {% endif %}
+
+                <li class="active"><a href="#"> {{ instances.number }} </a></li>
+
+{#                {% for page in checks.paginator.page_range %}#}
+{#                    <li class="{% if checks.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>#}
+{#                {% endfor %}#}
+
+                {% if instances.has_next %}
+                    <li><a href="?page={{ instances.next_page_number }}"> {{ instances.next_page_number }} </a></li>
+                {% endif %}
+
+                {% if instances.has_next2 %}
+                    <li><a href="?page={{ instances.next_page_number2 }}"> {{ instances.next_page_number2 }} </a></li>
+                {% endif %}
+
+
+                {% if instances.has_next3 %}
+                    <li><a href="?page={{ instances.next_page_number3 }}"> {{ instances.next_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if instances.number == instances.paginator.num_pages %}
+                    <li class="disabled"><a>Last → </a></li>
+                {% else %}
+                    <li><a href="?page={{ instances.paginator.num_pages }}">Last → </a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    <div class="span1">Showing {{ instances.number }} of {{ instances.paginator.num_pages }} entries</div>
+    </div>
+
+</div>
+
 
   </div>
 </div>

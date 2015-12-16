@@ -32,7 +32,7 @@ import re
 
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Page
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from utils import Paginator2
+from sohonet.utils import Paginator2
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from forms import HostSearchForm

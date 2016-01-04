@@ -11,6 +11,7 @@
   </div>
   <div class="col-xs-12">
 
+
       <form name="form1" action="{% url 'instance_info' name=name %}" method="GET" class="form-horizontal">
 {#      {% csrf_token %}#}
 
@@ -49,6 +50,9 @@
 
 <div class="pagination pagination-centered">
 
+
+    <div class="pagination pagination-centered">
+
     <div class="row-fluid">
         <div class="span12">
             <ul class="pagination pull-right">
@@ -68,15 +72,19 @@
                 {% endif %}
 
                 {% if instances.has_previous %}
+
 {#                    <li class="prev disabled"><a href="?page={{ checks.previous_page_number }}">← Previous</a></li>#}
+
                     <li><a href="?page={{ instances.previous_page_number }}"> {{ instances.previous_page_number }} </a></li>
                 {% endif %}
 
                 <li class="active"><a href="#"> {{ instances.number }} </a></li>
 
+
 {#                {% for page in checks.paginator.page_range %}#}
 {#                    <li class="{% if checks.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>#}
 {#                {% endfor %}#}
+
 
                 {% if instances.has_next %}
                     <li><a href="?page={{ instances.next_page_number }}"> {{ instances.next_page_number }} </a></li>
@@ -102,19 +110,24 @@
     <div class="span1">Showing {{ instances.number }} of {{ instances.paginator.num_pages }} entries</div>
     </div>
 
+
 </div>
+
+    </div>
+
+
 
 
   </div>
 </div>
 {% endblock content %}
-
-{% block js %}
-{% load compress %}
-{{ block.super }}
-{% compress js %}
-<script type="text/coffeescript">
-
-</script>
-{% endcompress %}
-{% endblock js %}
+{##}
+{#{% block js %}#}
+{#{% load compress %}#}
+{#{{ block.super }}#}
+{#{% compress js %}#}
+{#<script type="text/coffeescript">#}
+{##}
+{#</script>#}
+{#{% endcompress %}#}
+{#{% endblock js %}#}

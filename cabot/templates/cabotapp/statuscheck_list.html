@@ -5,7 +5,9 @@
 {% include 'cabotapp/_statuscheck_list.html' with checks_type="All" %}
 
 
+
 <div class="pagination pagination-centered">
+
 
     <div class="row-fluid">
         <div class="span12">
@@ -26,15 +28,19 @@
                 {% endif %}
 
                 {% if checks.has_previous %}
+
 {#                    <li class="prev disabled"><a href="?page={{ checks.previous_page_number }}">← Previous</a></li>#}
+
                     <li><a href="?page={{ checks.previous_page_number }}"> {{ checks.previous_page_number }} </a></li>
                 {% endif %}
 
                 <li class="active"><a href="#"> {{ checks.number }} </a></li>
 
+
 {#                {% for page in checks.paginator.page_range %}#}
 {#                    <li class="{% if checks.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>#}
 {#                {% endfor %}#}
+
 
                 {% if checks.has_next %}
                     <li><a href="?page={{ checks.next_page_number }}"> {{ checks.next_page_number }} </a></li>
@@ -61,6 +67,7 @@
     </div>
 
 </div>
+
 
 
 
@@ -92,6 +99,7 @@
 {#            <li><a href="?page={{ checks.paginator.num_pages }}">>></a></li>#}
 {#        {% endif %}#}
 {#</ul>#}
+
 
 
 {% endblock content %}

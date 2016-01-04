@@ -30,14 +30,11 @@ import requests
 import json
 import re
 
-# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger, Page
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from sohonet.utils import Paginator2
+from utils import Paginator2
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from forms import HostSearchForm
-
-
 class LoginRequiredMixin(object):
 
     @method_decorator(login_required)
@@ -487,9 +484,61 @@ class JenkinsCheckUpdateView(CheckUpdateView):
 class StatusCheckListView_orig(LoginRequiredMixin, ListView):
     model = StatusCheck
     context_object_name = 'checks'
+    template_name = 'cabotapp/statuscheck_list.html'
+    form = HostSearchForm
 
-    def get_queryset(self):
-        return StatusCheck.objects.all().order_by('name').prefetch_related('service_set', 'instance_set')
+    def get(self, request):
+        data = StatusCheck.objects.all().order_by('name')
+        if data:
+            paginator = Paginator2(data, 20)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'checks': records, 'form': self.form})
+        else:
+            return render(request, self.template_name, {'form': self.form})
+
+
+class StatusCheckSearchView(LoginRequiredMixin, ListView):
+    model = StatusCheck
+    context_object_name = 'checks'
+    template_name = 'cabotapp/statuscheck_list.html'
+    form = HostSearchForm
+
+    def get(self, request, name=None):
+        data = StatusCheck.objects.filter(name__icontains=name).order_by('name')
+        if data:
+            paginator = Paginator2(data, 20)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'checks': records, 'form': self.form})
+        else:
+            return redirect('checks')
+
+
+def StatusCheckSearchViewFBV(request, name=None):
+    if request.method == 'GET':
+        form = HostSearchForm(request.GET)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            return redirect('checks_search', name=name)
+        else:
+            return redirect('checks')
+    else:
+        return redirect('checks')
 
 
 class StatusCheckListView(LoginRequiredMixin, ListView):
@@ -683,9 +732,11 @@ class InstanceSearchView(LoginRequiredMixin, ListView):
     form = HostSearchForm
 
     def get(self, request, name=None):
+
         # import ipdb; ipdb.set_trace()
         # name = request.GET.get('name', False)
         # name = self.kwargs.get('name')
+
         data = Instance.objects.filter(name__icontains=name).order_by('name')
         if data:
             paginator = Paginator2(data, 20)
@@ -729,19 +780,21 @@ class SearchViewCBV(LoginRequiredMixin, View):
 
         # return Instance.objects.get(name=self.kwargs.get("name"))
 
+        return redirect('instances')
+
 
 def SearchViewFBV(request, name=None):
     if request.method == 'GET':
         form = HostSearchForm(request.GET)
         if form.is_valid():
             name = form.cleaned_data['name']
-
             try:
                 instance = Instance.objects.get(name=name)
                 return redirect('instance', pk=instance.pk)
             except Instance.DoesNotExist:
                 # return redirect('instances')
                 return redirect('instances_search', name=name)
+            return redirect('instances_search', name=name)
         else:
             return redirect('instances')
     else:

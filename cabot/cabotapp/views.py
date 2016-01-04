@@ -801,7 +801,7 @@ def SearchViewFBV(request, name=None):
         return redirect("instances")
 
 
-class ServiceListView(LoginRequiredMixin, ListView):
+class ServiceListView_orig(LoginRequiredMixin, ListView):
     model = Service
     context_object_name = 'services'
 
@@ -809,6 +809,36 @@ class ServiceListView(LoginRequiredMixin, ListView):
 
         return Service.objects.all().order_by('-overall_status').prefetch_related('status_checks')
         # return Service.objects.all().order_by('name').prefetch_related('status_checks')
+
+
+class ServiceListView(LoginRequiredMixin, ListView):
+    model = Service
+    context_object_name = 'services'
+    template_name = 'cabotapp/service_list.html'
+    form = HostSearchForm
+
+    def get(self, request):
+        data = Service.objects.all().order_by('-overall_status').prefetch_related('status_checks')
+        # data = Service.objects.all().order_by('name').prefetch_related('status_checks')
+
+        if data:
+            paginator = Paginator2(data, 20)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'services': records, 'form': self.form})
+        else:
+            return render(request, self.template_name, {'form': self.form})
+
+
+
+
 
 class InstanceDetailView(LoginRequiredMixin, DetailView):
     model = Instance

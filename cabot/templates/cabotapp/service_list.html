@@ -11,6 +11,71 @@
   </div>
   <div class="col-xs-12">
     {% include 'cabotapp/_service_list.html' %}
+
+  <div class="pagination pagination-centered">
+
+
+    <div class="pagination pagination-centered">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="pagination pull-right">
+
+                {% if services.number != 1 %}
+                    <li><a href="?page=1">← First</a></li>
+                {% else %}
+                    <li class="disabled"><a>← First</a></li>
+                {% endif %}
+
+                {% if services.has_previous3 %}
+                    <li><a href="?page={{ services.previous_page_number3 }}"> {{ services.previous_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if services.has_previous2 %}
+                    <li><a href="?page={{ services.previous_page_number2 }}"> {{ services.previous_page_number2 }} </a></li>
+                {% endif %}
+
+                {% if services.has_previous %}
+
+{#                    <li class="prev disabled"><a href="?page={{ checks.previous_page_number }}">← Previous</a></li>#}
+
+                    <li><a href="?page={{ services.previous_page_number }}"> {{ services.previous_page_number }} </a></li>
+                {% endif %}
+
+                <li class="active"><a href="#"> {{ services.number }} </a></li>
+
+
+{#                {% for page in checks.paginator.page_range %}#}
+{#                    <li class="{% if checks.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>#}
+{#                {% endfor %}#}
+
+
+                {% if services.has_next %}
+                    <li><a href="?page={{ services.next_page_number }}"> {{ services.next_page_number }} </a></li>
+                {% endif %}
+
+                {% if services.has_next2 %}
+                    <li><a href="?page={{ services.next_page_number2 }}"> {{ services.next_page_number2 }} </a></li>
+                {% endif %}
+
+
+                {% if services.has_next3 %}
+                    <li><a href="?page={{ services.next_page_number3 }}"> {{ services.next_page_number3 }} </a></li>
+                {% endif %}
+
+                {% if services.number == services.paginator.num_pages %}
+                    <li class="disabled"><a>Last → </a></li>
+                {% else %}
+                    <li><a href="?page={{ services.paginator.num_pages }}">Last → </a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    <div class="span1">Showing {{ services.number }} of {{ services.paginator.num_pages }} entries</div>
+    </div>
+</div>
+
+
   </div>
 </div>
 {% endblock content %}

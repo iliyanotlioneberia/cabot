@@ -10,6 +10,27 @@
     </div>
   </div>
   <div class="col-xs-12">
+
+
+        <form name="form1" action="{% url 'service_info' name=name %}" method="GET" class="form-horizontal">
+{#      {% csrf_token %}#}
+
+          <div class="form-group">
+              <div class="col-sm-5">
+                  <input type="text" name="name" class="form-control" id="hostname" placeholder="Pick a service">
+              </div>
+
+{#              {{ form }}#}
+
+{#        <br>#}
+              <div class="span7 text-left">
+                  <input class="btn btn-info btn-group-sm" type="submit" name="submit" value="Submit">
+              </div>
+          </div>
+
+      </form>
+
+
     {% include 'cabotapp/_service_list.html' %}
 
   <div class="pagination pagination-centered">

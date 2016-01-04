@@ -15,7 +15,8 @@ from cabot.cabotapp.views import (InstanceListView, InstanceDetailView,
     InstanceUpdateView, InstanceCreateView, InstanceDeleteView,
     ServiceListView, ServiceDetailView,
     ServiceUpdateView, ServiceCreateView, ServiceDeleteView,
-    UserProfileUpdateView, ShiftListView, subscriptions, InstanceSearchView, StatusCheckSearchView)
+    UserProfileUpdateView, ShiftListView, subscriptions, InstanceSearchView, StatusCheckSearchView,
+    ServiceSearchView)
 
 from cabot import rest_urls
 
@@ -156,6 +157,10 @@ urlpatterns = patterns('',
      url(r'^instanceinfo/(?P<name>.*)/', 'cabot.cabotapp.views.SearchViewFBV', name='instance_info'),
 
      url(r'^instancesearch/(?P<name>.*)/', view=InstanceSearchView.as_view(), name='instances_search'),
+
+     url(r'^serviceinfo/(?P<name>.*)/', 'cabot.cabotapp.views.ServiceSearchViewFBV', name='service_info'),
+
+     url(r'^servicesearch/(?P<name>.*)/', view=ServiceSearchView.as_view(), name='service_search'),
 
      url(r'^checksinfo/(?P<name>.*)/', 'cabot.cabotapp.views.StatusCheckSearchViewFBV', name='checks_info'),
 

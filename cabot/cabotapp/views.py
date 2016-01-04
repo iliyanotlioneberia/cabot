@@ -837,6 +837,54 @@ class ServiceListView(LoginRequiredMixin, ListView):
             return render(request, self.template_name, {'form': self.form})
 
 
+def ServiceSearchViewFBV(request, name=None):
+    if request.method == 'GET':
+        form = HostSearchForm(request.GET)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            try:
+                service = Service.objects.get(name=name)
+                return redirect('service', pk=service.pk)
+            except Service.DoesNotExist:
+                # return redirect('instances')
+                return redirect('service_search', name=name)
+            return redirect('service_search', name=name)
+        else:
+            return redirect('services')
+    else:
+        return redirect("services")
+
+
+class ServiceSearchView(LoginRequiredMixin, ListView):
+    model = Service
+    context_object_name = 'services'
+    template_name = 'cabotapp/service_list.html'
+    form = HostSearchForm
+
+    def get(self, request, name=None):
+
+        # import ipdb; ipdb.set_trace()
+        # name = request.GET.get('name', False)
+        # name = self.kwargs.get('name')
+
+        data = Service.objects.filter(name__icontains=name).order_by('name')
+        if data:
+            paginator = Paginator2(data, 20)
+            page = request.GET.get('page')
+
+            try:
+                records = paginator.page(page)
+            except PageNotAnInteger:
+                records = paginator.page(1)
+            except EmptyPage:
+                records = paginator.page(paginator.num_pages)
+
+            return render(request, self.template_name, {'services': records, 'form': self.form})
+        else:
+            # return render(request, self.template_name, {'form': self.form})
+            return redirect('services')
+
+
 
 
 

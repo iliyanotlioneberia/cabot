@@ -818,7 +818,7 @@ class ServiceListView(LoginRequiredMixin, ListView):
     form = HostSearchForm
 
     def get(self, request):
-        data = Service.objects.all().order_by('-overall_status').prefetch_related('status_checks')
+        data = Service.objects.all().order_by('overall_status').prefetch_related('status_checks')
         # data = Service.objects.all().order_by('name').prefetch_related('status_checks')
 
         if data:

@@ -807,8 +807,8 @@ class ServiceListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
-        # return Service.objects.all().order_by('-overall_status').prefetch_related('status_checks')
-        return Service.objects.all().order_by('name').prefetch_related('status_checks')
+        return Service.objects.all().order_by('-overall_status').prefetch_related('status_checks')
+        # return Service.objects.all().order_by('name').prefetch_related('status_checks')
 
 class InstanceDetailView(LoginRequiredMixin, DetailView):
     model = Instance

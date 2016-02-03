@@ -9,8 +9,8 @@ CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
 CELERYD_TASK_SOFT_TIME_LIMIT = 120
 CELERYD_TASK_TIME_LIMIT = 150
 ### Maclin fix
-CELERY_TASK_RESULT_EXPIRES = 10
-CELERY_IGNORE_RESULT = True
+# CELERY_TASK_RESULT_EXPIRES = 10
+# CELERY_IGNORE_RESULT = True
 
 CELERYBEAT_SCHEDULE = {
     'run-all-checks': {
@@ -25,10 +25,11 @@ CELERYBEAT_SCHEDULE = {
         'task': 'cabot.cabotapp.tasks.clean_db',
         'schedule': timedelta(seconds=60*60*24),
     },
-    # 'delete_celery_cache_redis': {
-    #     'task': 'cabot.cabotapp.tasks.delete_celery_cache_redis',
-    #     'schedule': timedelta(seconds=60*60*24),
-    # },
+    ### deletes 'celery' key in redis every 6 hours
+    'delete_celery_cache_redis': {
+        'task': 'cabot.cabotapp.tasks.delete_celery_cache_redis',
+        'schedule': timedelta(seconds=60*60*6),
+    },
 }
 
 CELERY_TIMEZONE = 'UTC'

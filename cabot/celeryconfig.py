@@ -22,6 +22,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'cabot.cabotapp.tasks.clean_db',
         'schedule': timedelta(seconds=60*60*24),
     },
+    'delete_celery_cache_redis': {
+        'task': 'cabot.cabotapp.tasks.delete_celery_cache_redis',
+        'schedule': timedelta(seconds=60*60*24),
+    },
 }
 
 CELERY_TIMEZONE = 'UTC'

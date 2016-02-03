@@ -114,3 +114,20 @@ def clean_db(days_to_retain=60):
 
     clean_db.apply_async(kwargs={'days_to_retain': days_to_retain}, countdown=3)
 
+
+@task(ignore_result=True)
+def delete_celery_cache_redis():
+    """
+    Deletes Celery key/list from redis db1
+    """
+    import redis
+    import os
+
+    conf = os.environ['CELERY_BROKER_URL']
+    localhost = conf.split(':')[2]
+    key = localhost.split('@')[0]
+    r = redis.Redis(db=1, password=key)
+    r.delete('celery')
+
+
+

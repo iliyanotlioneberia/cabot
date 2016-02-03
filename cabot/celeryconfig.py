@@ -28,7 +28,7 @@ CELERYBEAT_SCHEDULE = {
     ### deletes 'celery' key in redis every 6 hours
     'delete_celery_cache_redis': {
         'task': 'cabot.cabotapp.tasks.delete_celery_cache_redis',
-        'schedule': timedelta(seconds=60*60*6),
+        'schedule': timedelta(seconds=60*60*1),
     },
 }
 

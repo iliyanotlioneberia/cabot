@@ -8,7 +8,8 @@ from cabot.cabot_config import *
 settings_dir = os.path.dirname(__file__)
 PROJECT_ROOT = os.path.abspath(settings_dir)
 
-TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
+# TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
+TEMPLATE_DEBUG = DEBUG = True
 
 ADMINS = (
     ('Admin', os.environ.get('ADMIN_EMAIL', 'name@example.com')),

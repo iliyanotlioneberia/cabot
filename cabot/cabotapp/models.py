@@ -340,10 +340,10 @@ class Instance(CheckGroupMixin):
         help_text="Address (IP/Hostname) of service."
     )
 
-    snmp_community = models.TextField(
-        blank=True,
-        help_text="SNMP community string authentication."
-    )
+    # snmp_community = models.TextField(
+    #     blank=True,
+    #     help_text="SNMP community string authentication."
+    # )
 
     def icmp_status_checks(self):
         return self.status_checks.filter(polymorphic_ctype__model='icmpstatuscheck')

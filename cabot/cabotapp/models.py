@@ -47,6 +47,11 @@ CHECK_TYPES = (
     ('==', 'Equal to'),
 )
 
+SNMP = (
+    (True, 'Yes'),
+    (False, 'No'),
+)
+
 def serialize_recent_results(recent_results):
     if not recent_results:
         return ''
@@ -340,10 +345,11 @@ class Instance(CheckGroupMixin):
         help_text="Address (IP/Hostname) of service."
     )
 
-    # snmp_community = models.TextField(
-    #     blank=True,
-    #     help_text="SNMP community string authentication."
-    # )
+    snmp_community = models.CharField(
+        max_length=100,
+        null=True,
+        help_text="SNMP community string authentication."
+    )
 
     def icmp_status_checks(self):
         return self.status_checks.filter(polymorphic_ctype__model='icmpstatuscheck')
@@ -490,6 +496,19 @@ class StatusCheck(PolymorphicModel):
         null=True,
         blank=True,
         help_text='Alert if build queued for more than this many minutes.',
+    )
+
+    # SNMP checks
+    uptime = models.CharField(
+        max_length=100,
+        null=True,
+        help_text='SNMP uptime OID.',
+    )
+
+    snmp_auth_status = models.CharField(
+        choices=SNMP,
+        max_length=100,
+        null=True,
     )
 
     class Meta(PolymorphicModel.Meta):

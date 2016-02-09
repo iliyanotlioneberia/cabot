@@ -32,6 +32,9 @@ import itertools
 import requests
 from celery.utils.log import get_task_logger
 
+# imports for snmp
+from hnmp import SNMP
+
 RAW_DATA_LIMIT = 5000
 
 logger = get_task_logger(__name__)
@@ -337,6 +340,11 @@ class Instance(CheckGroupMixin):
         help_text="Address (IP/Hostname) of service."
     )
 
+    snmp_community = models.TextField(
+        blank=True,
+        help_text="SNMP community string authentication."
+    )
+
     def icmp_status_checks(self):
         return self.status_checks.filter(polymorphic_ctype__model='icmpstatuscheck')
 
@@ -346,6 +354,9 @@ class Instance(CheckGroupMixin):
     def delete(self, *args, **kwargs):
         self.icmp_status_checks().delete()
         return super(Instance, self).delete(*args, **kwargs)
+
+    def snmp_status_checks(self):
+        return self.status_checks.filter(polymorphic_ctype__model='snmpstatuscheck')
 
 
 class Snapshot(models.Model):
@@ -886,6 +897,7 @@ class AlertAcknowledgement(models.Model):
     def expires(self):
         return self.time + timedelta(minutes=settings.ACKNOWLEDGEMENT_EXPIRY)
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
 
@@ -970,3 +982,39 @@ def update_shifts():
             s.user = user
             s.deleted = False
             s.save()
+
+
+class SNMPStatusCheck(StatusCheck):
+
+    """
+    Copy of ICMPStatusCheck
+    """
+
+    class Meta(StatusCheck.Meta):
+        proxy = True
+
+    @property
+    def check_category(self):
+        return "SNMP Check"
+
+    def _run(self):
+        result = StatusCheckResult(check=self)
+        # instances = self.instance_set.all()
+        target = self.instance_set.get().address
+
+        # We need to read both STDOUT and STDERR because ping can write to both, depending on the kind of error. Thanks a lot, ping.
+        # ping_process = subprocess.Popen("ping -c 1 " + target, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        # response = ping_process.wait()
+
+        response = SNMP(target, community='')
+
+        # if response == 0:
+        #     result.succeeded = True
+        # else:
+        #     output = ping_process.stdout.read()
+        #     result.succeeded = False
+        #     result.error = output
+        #
+        # return result
+        return response
+
